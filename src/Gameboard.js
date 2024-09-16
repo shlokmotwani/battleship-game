@@ -19,7 +19,7 @@ class Gameboard {
   //vertical placement : axis= 1
   placeShipAt(ship, cell, axis){
     if(axis == 0){
-      if(cell.x + ship.length > this.board.size){
+      if(cell.x + ship.length >= this.size){
         return -1;
       }
       else{
