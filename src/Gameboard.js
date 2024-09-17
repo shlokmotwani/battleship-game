@@ -17,16 +17,29 @@ class Gameboard {
 
   //horizontal placement : axis= 0
   //vertical placement : axis= 1
-  placeShipAt(ship, cell, axis){
-    if(axis == 0){
-      if(cell.x + ship.length >= this.size){
-        return -1;
+  placeShipAt(ship, cell, axis) {
+    let cellXorY = axis == 0 ? cell.x : cell.y;
+
+    if (cellXorY + ship.length >= this.size) {
+      return -1;
+    } else {
+      this.insertShipOntoCells(cell, ship, axis);
+      return 1;
+    }
+  }
+
+  //insert ship on all cells starting from startCell until
+  //the length of the ship
+  insertShipOntoCells(startCell, ship, axis){
+    for(let i=0; i<ship.length; i++){
+      if(axis == 0){
+        this.board[startCell.x + i][startCell.y].insertShip(ship);
       }
       else{
-        return 1;
+        this.board[startCell.x][startCell.y + i].insertShip(ship);
       }
     }
   }
 }
 
-export {Gameboard}
+export { Gameboard };
