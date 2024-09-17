@@ -71,8 +71,8 @@ describe("Gameboard receives attack", () => {
   });
 
   test('Empty cells receive attack', ()=>{
-    expect(gameboard.receiveAttack(2, 5)).toBe(1);
-    expect(gameboard.board[2][5].hasBeenShot).toBeTruthy();
+    expect(gameboard.receiveAttack(7, 5)).toBe(0);
+    expect(gameboard.board[7][5].hasBeenShot).toBeTruthy();
     expect(gameboard.receiveAttack(0, 5)).toBe(0);
     expect(gameboard.board[0][5].hasBeenShot).toBeTruthy();
     expect(gameboard.receiveAttack(9, 9)).toBe(0);
