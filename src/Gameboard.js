@@ -1,6 +1,4 @@
-import { forEach } from "lodash";
 import { Cell } from "./Cell";
-import { Ship } from "./Ship";
 
 class Gameboard {
   constructor(size = 10) {
@@ -54,8 +52,8 @@ class Gameboard {
   }
 
   haveAllShipsSunk() {
-    for(let i=0; i<this.shipArray.length; i++){
-      if(!this.shipArray[i].isSunk()){
+    for (let i = 0; i < this.shipArray.length; i++) {
+      if (!this.shipArray[i].isSunk()) {
         return false;
       }
     }
