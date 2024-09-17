@@ -43,7 +43,7 @@ describe("Gameboard ship placements test", () => {
 describe("Gameboard receives attack", () => {
   let gameboard = new Gameboard();
 
-  test('empty cells', ()=>{
+  test("empty cells", () => {
     expect(gameboard.board[0][5].ship).toBeNull();
     expect(gameboard.board[7][5].ship).toBeNull();
     expect(gameboard.board[9][9].ship).toBeNull();
@@ -59,7 +59,7 @@ describe("Gameboard receives attack", () => {
   let ship4 = new Ship(4);
   gameboard.placeShipAt(ship4, gameboard.board[5][5], 1);
 
-  test('non-empty cells', ()=>{
+  test("non-empty cells", () => {
     expect(gameboard.board[4][5].ship).not.toBeNull();
     expect(gameboard.board[6][5].ship).not.toBeNull();
     expect(gameboard.board[7][7].ship).not.toBeNull();
@@ -70,20 +70,21 @@ describe("Gameboard receives attack", () => {
     expect(gameboard.board[5][5].ship).not.toBeNull();
   });
 
-  test('Empty cells receive attack', ()=>{
+  test("Empty cells receive attack", () => {
     expect(gameboard.receiveAttack(7, 5)).toBe(0);
     expect(gameboard.board[7][5].hasBeenShot).toBeTruthy();
     expect(gameboard.receiveAttack(0, 5)).toBe(0);
     expect(gameboard.board[0][5].hasBeenShot).toBeTruthy();
     expect(gameboard.receiveAttack(9, 9)).toBe(0);
     expect(gameboard.board[9][9].hasBeenShot).toBeTruthy();
+
     expect(gameboard.board[6][6].hasBeenShot).toBeFalsy();
     expect(gameboard.board[1][7].hasBeenShot).toBeFalsy();
     expect(gameboard.board[6][6].hasBeenShot).toBeFalsy();
     expect(gameboard.board[7][0].hasBeenShot).toBeFalsy();
   });
 
-  test('Non-empty cells receive attack', ()=>{
+  test("Non-empty cells receive attack", () => {
     expect(gameboard.receiveAttack(2, 5)).toBe(1);
     expect(gameboard.board[2][5].hasBeenShot).toBeTruthy();
     expect(gameboard.receiveAttack(6, 5)).toBe(1);
@@ -92,5 +93,37 @@ describe("Gameboard receives attack", () => {
     expect(gameboard.board[2][8].hasBeenShot).toBeTruthy();
     expect(gameboard.receiveAttack(5, 7)).toBe(1);
     expect(gameboard.board[5][7].hasBeenShot).toBeTruthy();
-  })
+  });
+});
+
+describe("Ships sink test", () => {
+  let gameboard = new Gameboard();
+  test("Have all ships sunk?", () => {
+    let ship1 = new Ship(5);
+    gameboard.placeShipAt(ship1, gameboard.board[2][5], 0);
+    let ship2 = new Ship(2);
+    gameboard.placeShipAt(ship2, gameboard.board[7][7], 0);
+    let ship3 = new Ship(3);
+    gameboard.placeShipAt(ship3, gameboard.board[2][6], 1);
+
+    expect(gameboard.shipArray.length).toBe(3);
+    expect(gameboard.haveAllShipsSunk()).toBeFalsy();
+    ship1.hit();
+    expect(gameboard.haveAllShipsSunk()).toBeFalsy();
+    ship1.hit();
+    expect(gameboard.haveAllShipsSunk()).toBeFalsy();
+    ship1.hit();
+    ship1.hit();
+    ship1.hit();
+
+    ship2.hit();
+    ship2.hit();
+
+    ship3.hit();
+    ship3.hit();
+
+    expect(gameboard.haveAllShipsSunk()).toBeFalsy();
+    ship3.hit();
+    expect(gameboard.haveAllShipsSunk()).toBeTruthy();
+  });
 });
