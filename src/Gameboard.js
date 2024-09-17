@@ -40,6 +40,17 @@ class Gameboard {
       }
     }
   }
+
+  receiveAttack(x, y){
+    this.board[x][y].hasBeenShot = true;
+    if(!this.board[x][y].ship){
+      return 0;
+    }
+    else{
+      this.board[x][y].ship.hit();
+      return 1;
+    }
+  }
 }
 
 export { Gameboard };

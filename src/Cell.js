@@ -3,6 +3,7 @@ class Cell{
         this.x = x;
         this.y = y;
         this.ship = null;
+        this.hasBeenShot = false;
     }
 
     insertShip(ship){
