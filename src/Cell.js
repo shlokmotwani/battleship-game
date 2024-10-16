@@ -9,6 +9,10 @@ class Cell {
   insertShip(ship) {
     this.ship = ship;
   }
+
+  containsShip(){
+    return this.ship != null;
+  }
 }
 
 export { Cell };

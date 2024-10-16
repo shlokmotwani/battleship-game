@@ -24,16 +24,16 @@ class Gameboard {
     if (cellXorY + ship.length >= this.size) {
       return -1;
     } else {
-      this.insertShipOntoCells(cell, ship, axis);
+      this.insertShipOntoCells(ship, cell, axis);
       return 1;
     }
   }
 
   //insert ship on all cells starting from startCell until
   //the length of the ship
-  insertShipOntoCells(startCell, ship, axis) {
+  insertShipOntoCells(ship, startCell, axis) {
     for (let i = 0; i < ship.length; i++) {
-      if (axis == 0) {
+      if (axis == 1) {
         this.board[startCell.x + i][startCell.y].insertShip(ship);
       } else {
         this.board[startCell.x][startCell.y + i].insertShip(ship);
