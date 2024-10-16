@@ -5,6 +5,7 @@ class Gameboard {
     this.size = size;
     this.board = [];
     this.shipArray = [];
+    this.missedAttacks = 0;
     for (let i = 0; i < this.size; i++) {
       let row = [];
       for (let j = 0; j < this.size; j++) {
@@ -44,6 +45,7 @@ class Gameboard {
   receiveAttack(x, y) {
     this.board[x][y].hasBeenShot = true;
     if (!this.board[x][y].ship) {
+      this.missedAttacks++;
       return 0;
     } else {
       this.board[x][y].ship.hit();
