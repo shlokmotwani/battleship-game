@@ -22,7 +22,7 @@ class Gameboard {
     this.shipArray.push(ship);
     let cellXorY = axis == 0 ? cell.x : cell.y;
 
-    if (cellXorY + ship.length >= this.size) {
+    if (cellXorY + ship.length > this.size) {
       return -1;
     } else {
       this.insertShipOntoCells(ship, cell, axis);
