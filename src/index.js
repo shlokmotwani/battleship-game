@@ -38,3 +38,12 @@ let computerShip3 = new Ship(5);
 
 boardWrapper.appendChild(player1BoardUI);
 boardWrapper.appendChild(player2BoardUI);
+
+
+//temporary display - to be deleted later
+let displayArea = document.createElement("div");
+displayArea.textContent = "DISPLAY AREA";
+displayArea.style.cssText = `
+color: white;
+font-size: 40px;`;
+mainWrapper.appendChild(displayArea);
