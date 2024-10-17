@@ -14,7 +14,7 @@ describe("Gameboard ship placements test", () => {
       -1
     );
     expect(gameboard.placeShipAt(new Ship(1), gameboard.board[9][9], 0)).toBe(
-      -1
+      1
     );
     expect(gameboard.placeShipAt(new Ship(4), gameboard.board[6][8], 0)).toBe(
       -1
@@ -32,10 +32,10 @@ describe("Gameboard ship placements test", () => {
       -1
     );
     expect(gameboard.placeShipAt(new Ship(1), gameboard.board[9][9], 1)).toBe(
-      -1
+      1
     );
     expect(gameboard.placeShipAt(new Ship(4), gameboard.board[6][8], 1)).toBe(
-      -1
+      1
     );
   });
 });

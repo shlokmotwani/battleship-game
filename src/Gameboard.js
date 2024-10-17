@@ -5,7 +5,6 @@ class Gameboard {
     this.size = size;
     this.board = [];
     this.shipArray = [];
-    this.missedAttacks = 0;
     for (let i = 0; i < this.size; i++) {
       let row = [];
       for (let j = 0; j < this.size; j++) {
@@ -20,9 +19,9 @@ class Gameboard {
   //vertical placement : axis= 1
   placeShipAt(ship, cell, axis) {
     this.shipArray.push(ship);
-    let cellXorY = axis == 0 ? cell.x : cell.y;
+    let cellXorY = axis == 0 ? cell.y : cell.x;
 
-    if (cellXorY + ship.length > this.size) {
+    if (cellXorY + ship.length-1 >= this.size) {
       return -1;
     } else {
       this.insertShipOntoCells(ship, cell, axis);
@@ -43,10 +42,8 @@ class Gameboard {
   }
 
   receiveAttack(x, y) {
-    //return values are important for the tests
     this.board[x][y].hasBeenShot = true;
     if (!this.board[x][y].ship) {
-      this.missedAttacks++;
       return 0;
     } else {
       this.board[x][y].ship.hit();
