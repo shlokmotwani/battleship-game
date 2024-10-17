@@ -1,6 +1,6 @@
 :root {
   --bg-color: blueviolet;
-  --grid-cell-color: salmon;
+  --grid-cell-color: gray;
   --grid-hit-cell-color: red;
 }
 
@@ -55,13 +55,13 @@ body {
   border: 2px solid black;
 }
 
-.cell.hit {
+.hit-cell {
   background-color: var(--grid-hit-cell-color);
 }
 
-.cell.hit.ship-cell {
-  background-color: var(--grid-hit-cell-color);
-  border: 2px solid yellow;
+/* remove this css in production */
+.ship-cell {
+  border: 2px solid greenyellow;
 }
 
 .board > div {

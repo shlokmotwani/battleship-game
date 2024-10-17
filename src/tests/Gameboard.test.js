@@ -40,7 +40,7 @@ describe("Gameboard ship placements test", () => {
   });
 });
 
-describe("Gameboard receives attack", () => {
+describe("Empty and non-empty cells", () => {
   let gameboard = new Gameboard();
 
   test("empty cells", () => {
@@ -50,25 +50,38 @@ describe("Gameboard receives attack", () => {
     expect(gameboard.board[3][6].ship).toBeNull();
   });
 
-  let ship1 = new Ship(5);
-  gameboard.placeShipAt(ship1, gameboard.board[2][5], 0);
-  let ship2 = new Ship(2);
-  gameboard.placeShipAt(ship2, gameboard.board[7][7], 0);
-  let ship3 = new Ship(3);
-  gameboard.placeShipAt(ship3, gameboard.board[2][6], 1);
-  let ship4 = new Ship(4);
-  gameboard.placeShipAt(ship4, gameboard.board[5][5], 1);
-
   test("non-empty cells", () => {
-    expect(gameboard.board[4][5].ship).not.toBeNull();
-    expect(gameboard.board[6][5].ship).not.toBeNull();
-    expect(gameboard.board[7][7].ship).not.toBeNull();
-    expect(gameboard.board[8][7].ship).not.toBeNull();
+    let ship1 = new Ship(5);
+    gameboard.placeShipAt(ship1, gameboard.board[2][5], 0);
+    let ship2 = new Ship(2);
+    gameboard.placeShipAt(ship2, gameboard.board[7][7], 0);
+    let ship3 = new Ship(3);
+    gameboard.placeShipAt(ship3, gameboard.board[2][6], 1);
+    let ship4 = new Ship(4);
+    gameboard.placeShipAt(ship4, gameboard.board[5][5], 1);
+
+    expect(gameboard.board[2][5].ship).not.toBeNull();
+    expect(gameboard.board[2][6].ship).not.toBeNull();
     expect(gameboard.board[2][7].ship).not.toBeNull();
     expect(gameboard.board[2][8].ship).not.toBeNull();
-    expect(gameboard.board[5][8].ship).not.toBeNull();
+    expect(gameboard.board[2][9].ship).not.toBeNull();
+
+    expect(gameboard.board[7][7].ship).not.toBeNull();
+    expect(gameboard.board[7][8].ship).not.toBeNull();
+
+    expect(gameboard.board[2][6].ship).not.toBeNull();
+    expect(gameboard.board[3][6].ship).not.toBeNull();
+    expect(gameboard.board[4][6].ship).not.toBeNull();
+
     expect(gameboard.board[5][5].ship).not.toBeNull();
+    expect(gameboard.board[6][5].ship).not.toBeNull();
+    expect(gameboard.board[7][5].ship).not.toBeNull();
+    expect(gameboard.board[8][5].ship).not.toBeNull();
   });
+});
+
+describe("Gameboard receives attack", () => {
+  let gameboard = new Gameboard();
 
   test("Empty cells receive attack", () => {
     expect(gameboard.receiveAttack(7, 5)).toBe(0);
@@ -85,14 +98,23 @@ describe("Gameboard receives attack", () => {
   });
 
   test("Non-empty cells receive attack", () => {
+    let ship1 = new Ship(5);
+    gameboard.placeShipAt(ship1, gameboard.board[2][5], 0);
+    let ship2 = new Ship(2);
+    gameboard.placeShipAt(ship2, gameboard.board[7][7], 0);
+    let ship3 = new Ship(3);
+    gameboard.placeShipAt(ship3, gameboard.board[2][6], 1);
+    let ship4 = new Ship(4);
+    gameboard.placeShipAt(ship4, gameboard.board[5][5], 1);
+
     expect(gameboard.receiveAttack(2, 5)).toBe(1);
     expect(gameboard.board[2][5].hasBeenShot).toBeTruthy();
     expect(gameboard.receiveAttack(6, 5)).toBe(1);
     expect(gameboard.board[6][5].hasBeenShot).toBeTruthy();
     expect(gameboard.receiveAttack(2, 8)).toBe(1);
     expect(gameboard.board[2][8].hasBeenShot).toBeTruthy();
-    expect(gameboard.receiveAttack(5, 7)).toBe(1);
-    expect(gameboard.board[5][7].hasBeenShot).toBeTruthy();
+    expect(gameboard.receiveAttack(7, 5)).toBe(1);
+    expect(gameboard.board[7][5].hasBeenShot).toBeTruthy();
   });
 });
 
