@@ -43,6 +43,7 @@ class Gameboard {
   }
 
   receiveAttack(x, y) {
+    //return values are important for the tests
     this.board[x][y].hasBeenShot = true;
     if (!this.board[x][y].ship) {
       this.missedAttacks++;

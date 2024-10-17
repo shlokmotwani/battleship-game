@@ -11,14 +11,14 @@ function createPlayerBoardUI(player) {
       let cellUI = document.createElement("div");
       cellUI.classList.add("cell");
 
+      //cells containing ship
+      if (player.gameboard.board[i][j].containsShip()) {
+        cellUI.classList.add("ship-cell");
+      }
+
       //attacked cells
       if (player.gameboard.board[i][j].hasBeenShot) {
-        cellUI.classList.add("hit");
-
-        //attacked cells containing ship
-        if (player.gameboard.board[i][j].containsShip()) {
-          cellUI.classList.add("ship-cell");
-        }
+        cellUI.classList.add("hit-cell");
       }
 
       row.appendChild(cellUI);
