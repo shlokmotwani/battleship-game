@@ -1,8 +1,9 @@
 import "./style/DOMController.css";
 
-function createPlayerBoardUI(player) {
+function createPlayerBoardUI(player, boardID) {
   let board = document.createElement("div");
   board.classList.add("board");
+  board.id = boardID;
 
   //insert cells into the board and add Event Listeners to them
   for (let i = 0; i < player.gameboard.size; i++) {
@@ -31,8 +32,15 @@ function createPlayerBoardUI(player) {
 }
 
 function cellEventListener(player, cellUI, i, j) {
-  cellUI.addEventListener("click", () => {
+  cellUI.addEventListener("click", (event) => {
     player.gameboard.receiveAttack(i, j);
+    let boardID = event.currentTarget.parentNode.parentNode.id;
+    if(boardID == "player-board"){
+      console.log("player board clicked");
+    }
+    else if(boardID == "computer-board"){
+      console.log("computer board clicked");
+    }
   });
 }
 
