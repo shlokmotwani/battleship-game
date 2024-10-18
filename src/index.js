@@ -5,24 +5,24 @@ import { Player } from "./Player";
 let mainWrapper;
 let boardWrapper;
 
-let player;
+let human;
 let computer;
 
-let playerShip1;
-let playerShip2;
-let playerShip3;
-let playerShip4;
-let playerShip5;
-let playerShip1Position;
-let playerShip2Position;
-let playerShip3Position;
-let playerShip4Position;
-let playerShip5Position;
-let playerShip1Axis;
-let playerShip2Axis;
-let playerShip3Axis;
-let playerShip4Axis;
-let playerShip5Axis;
+let humanShip1;
+let humanShip2;
+let humanShip3;
+let humanShip4;
+let humanShip5;
+let humanShip1Position;
+let humanShip2Position;
+let humanShip3Position;
+let humanShip4Position;
+let humanShip5Position;
+let humanShip1Axis;
+let humanShip2Axis;
+let humanShip3Axis;
+let humanShip4Axis;
+let humanShip5Axis;
 
 let computerShip1;
 let computerShip2;
@@ -41,51 +41,51 @@ let computerShip3Axis;
 let computerShip4Axis;
 let computerShip5Axis;
 
-let playerBoardUI;
+let humanBoardUI;
 let computerBoardUI;
-let playerTurn = true;
+let humanTurn = true;
 
-function playerSetup() {
-  playerShip1 = new Ship(3);
-  playerShip2 = new Ship(5);
-  playerShip3 = new Ship(4);
-  playerShip4 = new Ship(3);
-  playerShip5 = new Ship(2);
-  playerShip1Position = player.gameboard.board[0][0];
-  playerShip2Position = player.gameboard.board[3][3];
-  playerShip3Position = player.gameboard.board[5][5];
-  playerShip4Position = player.gameboard.board[7][6];
-  playerShip5Position = player.gameboard.board[1][7];
-  playerShip1Axis = 0;
-  playerShip2Axis = 1;
-  playerShip3Axis = 0;
-  playerShip4Axis = 1;
-  playerShip5Axis = 0;
+function humanSetup() {
+  humanShip1 = new Ship(3);
+  humanShip2 = new Ship(5);
+  humanShip3 = new Ship(4);
+  humanShip4 = new Ship(3);
+  humanShip5 = new Ship(2);
+  humanShip1Position = human.gameboard.board[0][0];
+  humanShip2Position = human.gameboard.board[3][3];
+  humanShip3Position = human.gameboard.board[5][5];
+  humanShip4Position = human.gameboard.board[7][6];
+  humanShip5Position = human.gameboard.board[1][7];
+  humanShip1Axis = 0;
+  humanShip2Axis = 1;
+  humanShip3Axis = 0;
+  humanShip4Axis = 1;
+  humanShip5Axis = 0;
 
-  player.gameboard.placeShipAt(
-    playerShip1,
-    playerShip1Position,
-    playerShip1Axis
+  human.gameboard.placeShipAt(
+    humanShip1,
+    humanShip1Position,
+    humanShip1Axis
   );
-  player.gameboard.placeShipAt(
-    playerShip2,
-    playerShip2Position,
-    playerShip2Axis
+  human.gameboard.placeShipAt(
+    humanShip2,
+    humanShip2Position,
+    humanShip2Axis
   );
-  player.gameboard.placeShipAt(
-    playerShip3,
-    playerShip3Position,
-    playerShip3Axis
+  human.gameboard.placeShipAt(
+    humanShip3,
+    humanShip3Position,
+    humanShip3Axis
   );
-  player.gameboard.placeShipAt(
-    playerShip4,
-    playerShip4Position,
-    playerShip4Axis
+  human.gameboard.placeShipAt(
+    humanShip4,
+    humanShip4Position,
+    humanShip4Axis
   );
-  player.gameboard.placeShipAt(
-    playerShip5,
-    playerShip5Position,
-    playerShip5Axis
+  human.gameboard.placeShipAt(
+    humanShip5,
+    humanShip5Position,
+    humanShip5Axis
   );
 }
 
@@ -147,7 +147,7 @@ function displayAreaSetup() {
 }
 
 function gameplay() {
-  if (playerTurn) {
+  if (humanTurn) {
   }
 }
 
@@ -156,22 +156,22 @@ boardWrapper = document.querySelector("#wrapper-gameboard");
 
 boardWrapper.addEventListener("click", () => {
   boardWrapper.innerHTML = "";
-  playerBoardUI = createPlayerBoardUI(player, "player-board");
+  humanBoardUI = createPlayerBoardUI(human, "human-board");
   computerBoardUI = createPlayerBoardUI(computer, "computer-board");
-  boardWrapper.appendChild(playerBoardUI);
+  boardWrapper.appendChild(humanBoardUI);
   boardWrapper.appendChild(computerBoardUI);
 });
 
-player = new Player("Human");
+human = new Player("Human");
 computer = new Player("Computer");
-playerSetup();
+humanSetup();
 computerSetup();
 displayAreaSetup();
 
-playerBoardUI = createPlayerBoardUI(player, "player-board");
+humanBoardUI = createPlayerBoardUI(human, "human-board");
 computerBoardUI = createPlayerBoardUI(computer, "computer-board");
 
-boardWrapper.appendChild(playerBoardUI);
+boardWrapper.appendChild(humanBoardUI);
 boardWrapper.appendChild(computerBoardUI);
 
 gameplay();

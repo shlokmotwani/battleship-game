@@ -33,13 +33,13 @@ function createPlayerBoardUI(player, boardID) {
 
 function cellEventListener(player, cellUI, i, j) {
   cellUI.addEventListener("click", (event) => {
-    player.gameboard.receiveAttack(i, j);
     let boardID = event.currentTarget.parentNode.parentNode.id;
-    if(boardID == "player-board"){
-      console.log("player board clicked");
+    if(boardID == "human-board"){
+      console.log("human board clicked");
     }
     else if(boardID == "computer-board"){
       console.log("computer board clicked");
+      player.gameboard.receiveAttack(i, j);
     }
   });
 }
