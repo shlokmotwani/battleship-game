@@ -195,7 +195,6 @@ function renderPlayerBoardsUI() {
 
   computerBoardUI.addEventListener("click", (event) => {
     let id = event.target.id;
-    console.log(id);
     let x = id[1];
     let y = id[3];
 

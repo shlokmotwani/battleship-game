@@ -2,6 +2,7 @@
   --bg-color: blueviolet;
   --grid-cell-color: gray;
   --grid-hit-cell-color: red;
+  --grid-hit-ship-cell-color: green;
 }
 
 * {
@@ -62,6 +63,10 @@ body {
 /* remove this css in production */
 .ship-cell {
   border: 2px solid greenyellow;
+}
+
+.hit-cell.ship-cell{
+  background-color: var(--grid-hit-ship-cell-color);
 }
 
 .board > div {
