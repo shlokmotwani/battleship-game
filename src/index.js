@@ -8,45 +8,29 @@ let boardWrapper;
 let human;
 let computer;
 
-let humanShip1;
-let humanShip2;
-let humanShip3;
-let humanShip4;
-let humanShip5;
-let humanShip1Position;
-let humanShip2Position;
-let humanShip3Position;
-let humanShip4Position;
-let humanShip5Position;
-let humanShip1Axis;
-let humanShip2Axis;
-let humanShip3Axis;
-let humanShip4Axis;
-let humanShip5Axis;
-
-let computerShip1;
-let computerShip2;
-let computerShip3;
-let computerShip4;
-let computerShip5;
-
-let computerShip1Position;
-let computerShip2Position;
-let computerShip3Position;
-let computerShip4Position;
-let computerShip5Position;
-let computerShip1Axis;
-let computerShip2Axis;
-let computerShip3Axis;
-let computerShip4Axis;
-let computerShip5Axis;
-
 let humanBoardUI;
 let computerBoardUI;
 let humanTurn = true;
 let displayArea;
 
+//initialisation of human board
 function humanSetup() {
+  let humanShip1;
+  let humanShip2;
+  let humanShip3;
+  let humanShip4;
+  let humanShip5;
+  let humanShip1Position;
+  let humanShip2Position;
+  let humanShip3Position;
+  let humanShip4Position;
+  let humanShip5Position;
+  let humanShip1Axis;
+  let humanShip2Axis;
+  let humanShip3Axis;
+  let humanShip4Axis;
+  let humanShip5Axis;
+
   humanShip1 = new Ship(3);
   humanShip2 = new Ship(5);
   humanShip3 = new Ship(4);
@@ -70,7 +54,25 @@ function humanSetup() {
   human.gameboard.placeShipAt(humanShip5, humanShip5Position, humanShip5Axis);
 }
 
+//initialisation of computer board
 function computerSetup() {
+  let computerShip1;
+  let computerShip2;
+  let computerShip3;
+  let computerShip4;
+  let computerShip5;
+
+  let computerShip1Position;
+  let computerShip2Position;
+  let computerShip3Position;
+  let computerShip4Position;
+  let computerShip5Position;
+  let computerShip1Axis;
+  let computerShip2Axis;
+  let computerShip3Axis;
+  let computerShip4Axis;
+  let computerShip5Axis;
+
   computerShip1 = new Ship(2);
   computerShip2 = new Ship(3);
   computerShip3 = new Ship(5);
@@ -116,7 +118,7 @@ function computerSetup() {
   );
 }
 
-//temporary display - to be deleted later
+//temporary display feature - to be deleted later
 function displayAreaSetup() {
   displayArea = document.createElement("div");
   displayArea.textContent = "DISPLAY AREA";
@@ -142,6 +144,9 @@ function displayAreaSetup() {
 function swapTurns() {
   humanTurn = !humanTurn;
   displayArea.textContent = humanTurn ? "Human's turn" : "Computer's turn";
+}
+
+function computerPlaysAMove() {
   if (!humanTurn) {
     setTimeout(() => {
       computerAttackOn(human);
@@ -166,7 +171,6 @@ function getAttackableCells(playerBoard) {
 
 function computerAttackOn(player) {
   let attackableCells = getAttackableCells(player.gameboard.board);
-//   console.log(attackableCells);
   let cellToAttack =
     attackableCells[Math.floor(Math.random() * attackableCells.length)];
   let coordinates = cellToAttack.getCoordinates();
@@ -175,11 +179,12 @@ function computerAttackOn(player) {
 }
 
 function gameplay() {
+  human = new Player("Human");
+  computer = new Player("Computer");
   humanSetup();
   computerSetup();
   displayAreaSetup();
   renderPlayerBoardsUI();
-  // disableClickBasedOnPlayerTurn();
   displayArea.textContent = "Human's turn";
 }
 
@@ -188,13 +193,23 @@ function renderPlayerBoardsUI() {
   humanBoardUI = createPlayerBoardUI(human, "human-board");
   computerBoardUI = createPlayerBoardUI(computer, "computer-board");
 
-  computerBoardUI.addEventListener("click", () => {
+  computerBoardUI.addEventListener("click", (event) => {
+    let id = event.target.id;
+    console.log(id);
+    let x = id[1];
+    let y = id[3];
+
     if (humanTurn) {
-      // disableClickBasedOnPlayerTurn();
-      swapTurns();
+      if (computer.gameboard.board[x][y].isDead()) {
+        console.log("Cell has been hit already");
+      } else {
+        computer.gameboard.receiveAttack(x, y);
+        swapTurns();
+        computerPlaysAMove();
+      }
     }
   });
-  //   disableClickBasedOnPlayerTurn();
+
   boardWrapper.appendChild(humanBoardUI);
   boardWrapper.appendChild(computerBoardUI);
 }
@@ -205,8 +220,5 @@ boardWrapper = document.querySelector("#wrapper-gameboard");
 boardWrapper.addEventListener("click", () => {
   renderPlayerBoardsUI();
 });
-
-human = new Player("Human");
-computer = new Player("Computer");
 
 gameplay();
