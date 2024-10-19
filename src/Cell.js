@@ -6,12 +6,20 @@ class Cell {
     this.hasBeenShot = false;
   }
 
+  getCoordinates(){
+    return {x : this.x, y: this.y};
+  }
+
   insertShip(ship) {
     this.ship = ship;
   }
 
   containsShip(){
     return this.ship != null;
+  }
+
+  isDead(){
+    return this.hasBeenShot;
   }
 }
 

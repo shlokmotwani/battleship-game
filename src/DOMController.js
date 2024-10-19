@@ -34,12 +34,14 @@ function createPlayerBoardUI(player, boardID) {
 function cellEventListener(player, cellUI, i, j) {
   cellUI.addEventListener("click", (event) => {
     let boardID = event.currentTarget.parentNode.parentNode.id;
-    if(boardID == "human-board"){
-      console.log("human board clicked");
-    }
-    else if(boardID == "computer-board"){
-      console.log("computer board clicked");
-      player.gameboard.receiveAttack(i, j);
+    
+    if(boardID == "computer-board"){
+      if(player.gameboard.board[i][j].isDead()){
+        console.log("Cell has been hit already");
+      }
+      else{
+        player.gameboard.receiveAttack(i, j);
+      }
     }
   });
 }

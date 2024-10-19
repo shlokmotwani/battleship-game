@@ -44,6 +44,7 @@ let computerShip5Axis;
 let humanBoardUI;
 let computerBoardUI;
 let humanTurn = true;
+let displayArea;
 
 function humanSetup() {
   humanShip1 = new Ship(3);
@@ -62,31 +63,11 @@ function humanSetup() {
   humanShip4Axis = 1;
   humanShip5Axis = 0;
 
-  human.gameboard.placeShipAt(
-    humanShip1,
-    humanShip1Position,
-    humanShip1Axis
-  );
-  human.gameboard.placeShipAt(
-    humanShip2,
-    humanShip2Position,
-    humanShip2Axis
-  );
-  human.gameboard.placeShipAt(
-    humanShip3,
-    humanShip3Position,
-    humanShip3Axis
-  );
-  human.gameboard.placeShipAt(
-    humanShip4,
-    humanShip4Position,
-    humanShip4Axis
-  );
-  human.gameboard.placeShipAt(
-    humanShip5,
-    humanShip5Position,
-    humanShip5Axis
-  );
+  human.gameboard.placeShipAt(humanShip1, humanShip1Position, humanShip1Axis);
+  human.gameboard.placeShipAt(humanShip2, humanShip2Position, humanShip2Axis);
+  human.gameboard.placeShipAt(humanShip3, humanShip3Position, humanShip3Axis);
+  human.gameboard.placeShipAt(humanShip4, humanShip4Position, humanShip4Axis);
+  human.gameboard.placeShipAt(humanShip5, humanShip5Position, humanShip5Axis);
 }
 
 function computerSetup() {
@@ -137,7 +118,7 @@ function computerSetup() {
 
 //temporary display - to be deleted later
 function displayAreaSetup() {
-  let displayArea = document.createElement("div");
+  displayArea = document.createElement("div");
   displayArea.textContent = "DISPLAY AREA";
   displayArea.style.cssText = `
     color: white;
@@ -146,32 +127,86 @@ function displayAreaSetup() {
   mainWrapper.appendChild(displayArea);
 }
 
-function gameplay() {
-  if (humanTurn) {
+//multiplayer feature - to be implemented later
+// function disableClickBasedOnPlayerTurn() {
+//   if (humanTurn) {
+//     humanBoardUI.style.pointerEvents = 'none';
+//     computerBoardUI.style.pointerEvents = 'auto';
+//   }
+//   else{
+//     humanBoardUI.style.pointerEvents = 'auto';
+//     computerBoardUI.style.pointerEvents = 'none';
+//   }
+// }
+
+function swapTurns() {
+  humanTurn = !humanTurn;
+  displayArea.textContent = humanTurn ? "Human's turn" : "Computer's turn";
+  if (!humanTurn) {
+    setTimeout(() => {
+      computerAttackOn(human);
+      swapTurns();
+    }, 700);
   }
+}
+
+function getAttackableCells(playerBoard) {
+  let attackableCells = [];
+  let size = playerBoard.length;
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      let currentCell = playerBoard[i][j];
+      if (!currentCell.isDead()) {
+        attackableCells.push(currentCell);
+      }
+    }
+  }
+  return attackableCells;
+}
+
+function computerAttackOn(player) {
+  let attackableCells = getAttackableCells(player.gameboard.board);
+//   console.log(attackableCells);
+  let cellToAttack =
+    attackableCells[Math.floor(Math.random() * attackableCells.length)];
+  let coordinates = cellToAttack.getCoordinates();
+  player.gameboard.receiveAttack(coordinates.x, coordinates.y);
+  renderPlayerBoardsUI();
+}
+
+function gameplay() {
+  humanSetup();
+  computerSetup();
+  displayAreaSetup();
+  renderPlayerBoardsUI();
+  // disableClickBasedOnPlayerTurn();
+  displayArea.textContent = "Human's turn";
+}
+
+function renderPlayerBoardsUI() {
+  boardWrapper.innerHTML = "";
+  humanBoardUI = createPlayerBoardUI(human, "human-board");
+  computerBoardUI = createPlayerBoardUI(computer, "computer-board");
+
+  computerBoardUI.addEventListener("click", () => {
+    if (humanTurn) {
+      // disableClickBasedOnPlayerTurn();
+      swapTurns();
+    }
+  });
+  //   disableClickBasedOnPlayerTurn();
+  boardWrapper.appendChild(humanBoardUI);
+  boardWrapper.appendChild(computerBoardUI);
 }
 
 mainWrapper = document.querySelector("#wrapper-main");
 boardWrapper = document.querySelector("#wrapper-gameboard");
 
 boardWrapper.addEventListener("click", () => {
-  boardWrapper.innerHTML = "";
-  humanBoardUI = createPlayerBoardUI(human, "human-board");
-  computerBoardUI = createPlayerBoardUI(computer, "computer-board");
-  boardWrapper.appendChild(humanBoardUI);
-  boardWrapper.appendChild(computerBoardUI);
+  renderPlayerBoardsUI();
 });
 
 human = new Player("Human");
 computer = new Player("Computer");
-humanSetup();
-computerSetup();
-displayAreaSetup();
-
-humanBoardUI = createPlayerBoardUI(human, "human-board");
-computerBoardUI = createPlayerBoardUI(computer, "computer-board");
-
-boardWrapper.appendChild(humanBoardUI);
-boardWrapper.appendChild(computerBoardUI);
 
 gameplay();
