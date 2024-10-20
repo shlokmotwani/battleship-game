@@ -3,6 +3,7 @@
   --grid-cell-color: gray;
   --grid-hit-cell-color: red;
   --grid-hit-ship-cell-color: green;
+  --grid-sunk-cell-color: black;
 }
 
 * {
@@ -65,8 +66,12 @@ body {
   border: 2px solid greenyellow;
 }
 
-.hit-cell.ship-cell{
+.ship-cell.hit-cell {
   background-color: var(--grid-hit-ship-cell-color);
+}
+
+.ship-cell.sunk-cell {
+  background-color: var(--grid-sunk-cell-color);
 }
 
 .board > div {

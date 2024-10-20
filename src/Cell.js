@@ -18,6 +18,10 @@ class Cell {
     return this.ship != null;
   }
 
+  getShip(){
+    return this.ship;
+  }
+
   isDead(){
     return this.hasBeenShot;
   }

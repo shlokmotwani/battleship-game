@@ -33,11 +33,15 @@ class Gameboard {
   //the length of the ship
   insertShipOntoCells(ship, startCell, axis) {
     for (let i = 0; i < ship.length; i++) {
+      let cell;
       if (axis == 1) {
-        this.board[startCell.x + i][startCell.y].insertShip(ship);
+        cell = this.board[startCell.x + i][startCell.y]; 
+        cell.insertShip(ship);
       } else {
-        this.board[startCell.x][startCell.y + i].insertShip(ship);
+        cell = this.board[startCell.x][startCell.y + i]; 
+        cell.insertShip(ship);
       }
+      ship.insertIntoContainingCells(cell);
     }
   }
 

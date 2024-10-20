@@ -199,7 +199,8 @@ function renderPlayerBoardsUI() {
     let y = id[3];
 
     if (humanTurn) {
-      if (computer.gameboard.board[x][y].isDead()) {
+      let cell = computer.gameboard.board[x][y];
+      if (cell.isDead()) {
         console.log("Cell has been hit already");
       } else {
         computer.gameboard.receiveAttack(x, y);

@@ -23,6 +23,13 @@ function createPlayerBoardUI(player, boardID) {
         cellUI.classList.add("hit-cell");
       }
 
+      //sunk ship cells
+      if(player.gameboard.board[i][j].containsShip()){
+        if (player.gameboard.board[i][j].getShip().isSunk()) {
+          cellUI.classList.add("sunk-cell");
+        }
+      }
+
       row.appendChild(cellUI);
     }
     board.appendChild(row);
