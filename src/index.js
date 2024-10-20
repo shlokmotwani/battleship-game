@@ -153,6 +153,7 @@ function computerPlaysAMove() {
       swapTurns();
     }, 700);
   }
+  isGameOver();
 }
 
 function getAttackableCells(playerBoard) {
@@ -186,6 +187,7 @@ function gameplay() {
   displayAreaSetup();
   renderPlayerBoardsUI();
   displayArea.textContent = "Human's turn";
+  defaultHitsOnComputer();
 }
 
 function renderPlayerBoardsUI() {
@@ -205,13 +207,62 @@ function renderPlayerBoardsUI() {
       } else {
         computer.gameboard.receiveAttack(x, y);
         swapTurns();
-        computerPlaysAMove();
+        if(isGameOver()){
+            computerPlaysAMove();
+        }
       }
     }
   });
 
   boardWrapper.appendChild(humanBoardUI);
   boardWrapper.appendChild(computerBoardUI);
+}
+
+function isGameOver(){
+    let players = [human, computer];
+    players.forEach(player => {
+        if(player.gameboard.haveAllShipsSunk()){
+            console.log("GAME OVER");
+            if(player.name == "Human"){
+                displayArea.textContent = "Computer Wins!";
+            }
+            else{
+                displayArea.textContent = "Human Wins!";
+            }
+            boardWrapper.innerHTML = "";
+            return true;
+        }
+    });
+    return false;
+}
+
+//temporary function for tests - to be deleted later
+function defaultHitsOnComputer(){
+    computer.gameboard.receiveAttack(0, 0);
+    computer.gameboard.receiveAttack(0, 1);
+
+    computer.gameboard.receiveAttack(0, 5);
+    computer.gameboard.receiveAttack(1, 5);
+    computer.gameboard.receiveAttack(2, 5);
+    computer.gameboard.receiveAttack(3, 5);
+
+    computer.gameboard.receiveAttack(3, 3);
+    computer.gameboard.receiveAttack(4, 3);
+    computer.gameboard.receiveAttack(5, 3);
+
+    computer.gameboard.receiveAttack(5, 1);
+    computer.gameboard.receiveAttack(6, 1);
+    computer.gameboard.receiveAttack(7, 1);
+    computer.gameboard.receiveAttack(8, 1);
+    computer.gameboard.receiveAttack(9, 1);
+
+    computer.gameboard.receiveAttack(7, 5);
+    computer.gameboard.receiveAttack(7, 6);
+    computer.gameboard.receiveAttack(7, 7);
+    computer.gameboard.receiveAttack(7, 8);
+    renderPlayerBoardsUI();
+
+
 }
 
 mainWrapper = document.querySelector("#wrapper-main");
