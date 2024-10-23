@@ -151,7 +151,7 @@ function computerPlaysAMove() {
     setTimeout(() => {
       computerAttackOn(human);
       swapTurns();
-      let winner = isGameOver(); 
+      let winner = getWinnerIfGameOver(); 
         if (winner) {
             winnerDeclaration(winner);
         }
@@ -211,7 +211,7 @@ function renderPlayerBoardsUI() {
       } else {
         computer.gameboard.receiveAttack(x, y);
         swapTurns();
-        let winner = isGameOver();
+        let winner = getWinnerIfGameOver();
         if (!winner) {
           computerPlaysAMove();
         }
@@ -226,7 +226,7 @@ function renderPlayerBoardsUI() {
   boardWrapper.appendChild(computerBoardUI);
 }
 
-function isGameOver() {
+function getWinnerIfGameOver() {
   let players = [human, computer];
   let winner = null;
   players.forEach((player) => {
