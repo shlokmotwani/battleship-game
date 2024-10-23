@@ -21,11 +21,12 @@ class Gameboard {
 
   //horizontal placement : axis= 0
   //vertical placement : axis= 1
-  shipPlacementCheck(ship, cell, axis) {
+  shipPlacementCheck(ship, cell, axis, beingHovered=0) {
     let cellXorY = axis == 0 ? cell.y : cell.x;
     if (cellXorY + ship.length - 1 >= this.size) {
       return 0;
     } else {
+      let hoveredCells = [];
       for (let i = cellXorY; i < cellXorY + ship.length; i++) {
         let currentCell;
         if (axis) {
@@ -33,11 +34,14 @@ class Gameboard {
         } else {
           currentCell = this.board[cell.x][i];
         }
+        if(beingHovered){
+          hoveredCells.push(currentCell);
+        }
         if (currentCell.containsShip()) {
           return 0;
         }
       }
-      return 1;
+      return hoveredCells;
     }
   }
 

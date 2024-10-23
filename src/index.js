@@ -12,46 +12,30 @@ let humanBoardUI;
 let computerBoardUI;
 let humanTurn = true;
 let displayArea;
+let shipLengths = [2, 3, 3, 4, 5];
+let gameStarted = false;
 
 //initialisation of human board
 function humanSetup() {
-  let humanShip1;
-  let humanShip2;
-  let humanShip3;
-  let humanShip4;
-  let humanShip5;
-  let humanShip1Position;
-  let humanShip2Position;
-  let humanShip3Position;
-  let humanShip4Position;
-  let humanShip5Position;
-  let humanShip1Axis;
-  let humanShip2Axis;
-  let humanShip3Axis;
-  let humanShip4Axis;
-  let humanShip5Axis;
+  let placeButton;
+  let controllerDiv = document.createElement("div");
+  controllerDiv.cssText = `
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    width: 50%;`;
+  placeButton = document.createElement("button");
+  placeButton.id = "place-button";
+  placeButton.textContent = "Place ships";
 
-  humanShip1 = new Ship(3);
-  humanShip2 = new Ship(5);
-  humanShip3 = new Ship(4);
-  humanShip4 = new Ship(3);
-  humanShip5 = new Ship(2);
-  humanShip1Position = human.gameboard.board[0][0];
-  humanShip2Position = human.gameboard.board[3][3];
-  humanShip3Position = human.gameboard.board[5][5];
-  humanShip4Position = human.gameboard.board[7][6];
-  humanShip5Position = human.gameboard.board[1][7];
-  humanShip1Axis = 0;
-  humanShip2Axis = 1;
-  humanShip3Axis = 0;
-  humanShip4Axis = 1;
-  humanShip5Axis = 0;
+  placeButton.addEventListener("click", () => {
+    placeButton.style.visibility = "hidden";
+    gameStarted = true;
+    renderPlayerBoardsUI();
+  });
 
-  human.gameboard.placeShipAt(humanShip1, humanShip1Position, humanShip1Axis);
-  human.gameboard.placeShipAt(humanShip2, humanShip2Position, humanShip2Axis);
-  human.gameboard.placeShipAt(humanShip3, humanShip3Position, humanShip3Axis);
-  human.gameboard.placeShipAt(humanShip4, humanShip4Position, humanShip4Axis);
-  human.gameboard.placeShipAt(humanShip5, humanShip5Position, humanShip5Axis);
+  controllerDiv.appendChild(placeButton);
+  mainWrapper.appendChild(controllerDiv);
 }
 
 //initialisation of computer board
@@ -158,11 +142,71 @@ function gameplay() {
 }
 
 function renderPlayerBoardsUI() {
+  let shipCount = shipLengths.length;
+  let hoveredCells;
+
   boardWrapper.innerHTML = "";
   humanBoardUI = createPlayerBoardUI(human, "human-board");
   computerBoardUI = createPlayerBoardUI(computer, "computer-board");
 
+  if(gameStarted){
+    humanBoardUI.addEventListener("mouseover", (event) => {
+        let id = event.target.id;
+        let x = id[1];
+        let y = id[3];
+    
+        //ignores unnecessary target events
+        if (isNaN(x)) {
+          return;
+        }
+    
+        // place ships one-by-one on the board
+        for (let i = 0; i < shipCount; i++) {
+          let len = shipLengths[shipLengths.length - 1];
+          let ship = new Ship(len);
+          let axis = 0;
+          let cell = human.gameboard.board[x][y];
+          let beingHovered = 1;
+          hoveredCells = human.gameboard.shipPlacementCheck(
+            ship,
+            cell,
+            axis,
+            beingHovered
+          );
+          if (hoveredCells) {
+            for (let i = 0; i < hoveredCells.length; i++) {
+              let x = hoveredCells[i].getCoordinates().x;
+              let y = hoveredCells[i].getCoordinates().y;
+              humanBoardUI.children[x].children[y].classList.add("hovered-cell");
+            }
+          } else {
+            console.log("error");
+          }
+        }
+      });
+    
+      humanBoardUI.addEventListener("mouseout", () => {
+        if (hoveredCells) {
+          for (let i = 0; i < hoveredCells.length; i++) {
+            let x = hoveredCells[i].getCoordinates().x;
+            let y = hoveredCells[i].getCoordinates().y;
+            humanBoardUI.children[x].children[y].classList.remove("hovered-cell");
+          }
+        }
+      });
+    
+      humanBoardUI.addEventListener("click", () => {
+        if (hoveredCells) {
+          let ship = new Ship(shipLengths.pop());
+          let axis = 0;
+          human.gameboard.placeShipAt(ship, hoveredCells[0], axis);
+        }
+      });
+  }
+
   computerBoardUI.addEventListener("click", (event) => {
+    //the following few lines will fetch coordinates from a board
+    //less than 10 in size
     let id = event.target.id;
     let x = id[1];
     let y = id[3];
