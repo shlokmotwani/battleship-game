@@ -15,18 +15,26 @@ class Gameboard {
     }
   }
 
+  getBoardSize() {
+    return this.size;
+  }
+
+  //horizontal placement : axis= 0
+  //vertical placement : axis= 1
+  shipPlacementCheck(ship, cell, axis) {
+    let cellXorY = axis == 0 ? cell.y : cell.x;
+    if (cellXorY + ship.length - 1 >= this.size) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+
   //horizontal placement : axis= 0
   //vertical placement : axis= 1
   placeShipAt(ship, cell, axis) {
     this.shipArray.push(ship);
-    let cellXorY = axis == 0 ? cell.y : cell.x;
-
-    if (cellXorY + ship.length-1 >= this.size) {
-      return -1;
-    } else {
-      this.insertShipOntoCells(ship, cell, axis);
-      return 1;
-    }
+    this.insertShipOntoCells(ship, cell, axis);
   }
 
   //insert ship on all cells starting from startCell until
@@ -35,12 +43,11 @@ class Gameboard {
     for (let i = 0; i < ship.length; i++) {
       let cell;
       if (axis == 1) {
-        cell = this.board[startCell.x + i][startCell.y]; 
-        cell.insertShip(ship);
+        cell = this.board[startCell.x + i][startCell.y];
       } else {
-        cell = this.board[startCell.x][startCell.y + i]; 
-        cell.insertShip(ship);
+        cell = this.board[startCell.x][startCell.y + i];
       }
+      cell.insertShip(ship);
       ship.insertIntoContainingCells(cell);
     }
   }

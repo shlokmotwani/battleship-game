@@ -56,66 +56,29 @@ function humanSetup() {
 
 //initialisation of computer board
 function computerSetup() {
-  let computerShip1;
-  let computerShip2;
-  let computerShip3;
-  let computerShip4;
-  let computerShip5;
+  let size = computer.gameboard.getBoardSize();
+  let shipLengths = [2, 3, 3, 4, 5];
+  let shipCount = shipLengths.length;
 
-  let computerShip1Position;
-  let computerShip2Position;
-  let computerShip3Position;
-  let computerShip4Position;
-  let computerShip5Position;
-  let computerShip1Axis;
-  let computerShip2Axis;
-  let computerShip3Axis;
-  let computerShip4Axis;
-  let computerShip5Axis;
+  function getRandomValidCellFor(ship, axis) {
+    while (true) {
+      let x = Math.floor(Math.random() * size);
+      let y = Math.floor(Math.random() * size);
+      let cell = computer.gameboard.board[x][y];
+      if (computer.gameboard.shipPlacementCheck(ship, cell, axis)) {
+        return cell;
+      }
+    }
+  }
 
-  computerShip1 = new Ship(2);
-  computerShip2 = new Ship(3);
-  computerShip3 = new Ship(5);
-  computerShip4 = new Ship(5);
-  computerShip5 = new Ship(4);
+  for (let i = 0; i < shipCount; i++) {
+    let len = shipLengths.pop();
+    let ship = new Ship(len);
+    let axis = Math.round(Math.random());
+    let cell = getRandomValidCellFor(ship, axis);
 
-  computerShip1Position = computer.gameboard.board[0][0];
-  computerShip2Position = computer.gameboard.board[3][3];
-  computerShip3Position = computer.gameboard.board[7][5];
-  computerShip4Position = computer.gameboard.board[5][1];
-  computerShip5Position = computer.gameboard.board[0][5];
-
-  computerShip1Axis = 0;
-  computerShip2Axis = 1;
-  computerShip3Axis = 0;
-  computerShip4Axis = 1;
-  computerShip5Axis = 1;
-
-  computer.gameboard.placeShipAt(
-    computerShip1,
-    computerShip1Position,
-    computerShip1Axis
-  );
-  computer.gameboard.placeShipAt(
-    computerShip2,
-    computerShip2Position,
-    computerShip2Axis
-  );
-  computer.gameboard.placeShipAt(
-    computerShip3,
-    computerShip3Position,
-    computerShip3Axis
-  );
-  computer.gameboard.placeShipAt(
-    computerShip4,
-    computerShip4Position,
-    computerShip4Axis
-  );
-  computer.gameboard.placeShipAt(
-    computerShip5,
-    computerShip5Position,
-    computerShip5Axis
-  );
+    computer.gameboard.placeShipAt(ship, cell, axis);
+  }
 }
 
 //temporary display feature - to be deleted later
@@ -151,10 +114,10 @@ function computerPlaysAMove() {
     setTimeout(() => {
       computerAttackOn(human);
       swapTurns();
-      let winner = getWinnerIfGameOver(); 
-        if (winner) {
-            winnerDeclaration(winner);
-        }
+      let winner = getWinnerIfGameOver();
+      if (winner) {
+        winnerDeclaration(winner);
+      }
     }, 700);
   }
 }
@@ -190,8 +153,8 @@ function gameplay() {
   displayAreaSetup();
   renderPlayerBoardsUI();
   displayArea.textContent = "Human's turn";
-  defaultHitsOnComputer();
-//   defaultHitsOnHuman();
+  //   defaultHitsOnComputer();
+  //   defaultHitsOnHuman();
 }
 
 function renderPlayerBoardsUI() {
@@ -214,9 +177,8 @@ function renderPlayerBoardsUI() {
         let winner = getWinnerIfGameOver();
         if (!winner) {
           computerPlaysAMove();
-        }
-        else{
-            winnerDeclaration(winner);
+        } else {
+          winnerDeclaration(winner);
         }
       }
     }
@@ -238,14 +200,14 @@ function getWinnerIfGameOver() {
   return winner;
 }
 
-function winnerDeclaration(player){
-    console.log("GAME OVER");
-      if (player.name == "Human") {
-        displayArea.textContent = "Computer Wins!";
-      } else {
-        displayArea.textContent = "Human Wins!";
-      }
-      boardWrapper.innerHTML = "";
+function winnerDeclaration(player) {
+  console.log("GAME OVER");
+  if (player.name == "Human") {
+    displayArea.textContent = "Computer Wins!";
+  } else {
+    displayArea.textContent = "Human Wins!";
+  }
+  boardWrapper.innerHTML = "";
 }
 
 //temporary function for tests - to be deleted later
