@@ -26,6 +26,17 @@ class Gameboard {
     if (cellXorY + ship.length - 1 >= this.size) {
       return 0;
     } else {
+      for (let i = cellXorY; i < cellXorY + ship.length; i++) {
+        let currentCell;
+        if (axis) {
+          currentCell = this.board[i][cell.y];
+        } else {
+          currentCell = this.board[cell.x][i];
+        }
+        if (currentCell.containsShip()) {
+          return 0;
+        }
+      }
       return 1;
     }
   }

@@ -71,12 +71,12 @@ function computerSetup() {
     }
   }
 
+  //place randomly created ships on the board
   for (let i = 0; i < shipCount; i++) {
     let len = shipLengths.pop();
     let ship = new Ship(len);
     let axis = Math.round(Math.random());
     let cell = getRandomValidCellFor(ship, axis);
-
     computer.gameboard.placeShipAt(ship, cell, axis);
   }
 }
