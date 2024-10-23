@@ -151,9 +151,12 @@ function computerPlaysAMove() {
     setTimeout(() => {
       computerAttackOn(human);
       swapTurns();
+      let winner = isGameOver(); 
+        if (winner) {
+            winnerDeclaration(winner);
+        }
     }, 700);
   }
-  isGameOver();
 }
 
 function getAttackableCells(playerBoard) {
@@ -187,7 +190,8 @@ function gameplay() {
   displayAreaSetup();
   renderPlayerBoardsUI();
   displayArea.textContent = "Human's turn";
-//   defaultHitsOnComputer();
+  defaultHitsOnComputer();
+//   defaultHitsOnHuman();
 }
 
 function renderPlayerBoardsUI() {
@@ -207,8 +211,12 @@ function renderPlayerBoardsUI() {
       } else {
         computer.gameboard.receiveAttack(x, y);
         swapTurns();
-        if(!isGameOver()){
-            computerPlaysAMove();
+        let winner = isGameOver();
+        if (!winner) {
+          computerPlaysAMove();
+        }
+        else{
+            winnerDeclaration(winner);
         }
       }
     }
@@ -218,49 +226,71 @@ function renderPlayerBoardsUI() {
   boardWrapper.appendChild(computerBoardUI);
 }
 
-function isGameOver(){
-    let players = [human, computer];
-    players.forEach(player => {
-        if(player.gameboard.haveAllShipsSunk()){
-            console.log("GAME OVER");
-            if(player.name == "Human"){
-                displayArea.textContent = "Computer Wins!";
-            }
-            else{
-                displayArea.textContent = "Human Wins!";
-            }
-            boardWrapper.innerHTML = "";
-            return true;
-        }
-    });
-    return false;
+function isGameOver() {
+  let players = [human, computer];
+  let winner = null;
+  players.forEach((player) => {
+    if (player.gameboard.haveAllShipsSunk()) {
+      winner = player;
+      return;
+    }
+  });
+  return winner;
+}
+
+function winnerDeclaration(player){
+    console.log("GAME OVER");
+      if (player.name == "Human") {
+        displayArea.textContent = "Computer Wins!";
+      } else {
+        displayArea.textContent = "Human Wins!";
+      }
+      boardWrapper.innerHTML = "";
 }
 
 //temporary function for tests - to be deleted later
-function defaultHitsOnComputer(){
-    computer.gameboard.receiveAttack(0, 0);
-    computer.gameboard.receiveAttack(0, 1);
+function defaultHitsOnComputer() {
+  computer.gameboard.receiveAttack(0, 0);
+  computer.gameboard.receiveAttack(0, 1);
 
-    computer.gameboard.receiveAttack(0, 5);
-    computer.gameboard.receiveAttack(1, 5);
-    computer.gameboard.receiveAttack(2, 5);
-    computer.gameboard.receiveAttack(3, 5);
+  computer.gameboard.receiveAttack(0, 5);
+  computer.gameboard.receiveAttack(1, 5);
+  computer.gameboard.receiveAttack(2, 5);
+  computer.gameboard.receiveAttack(3, 5);
 
-    computer.gameboard.receiveAttack(3, 3);
-    computer.gameboard.receiveAttack(4, 3);
-    computer.gameboard.receiveAttack(5, 3);
+  computer.gameboard.receiveAttack(3, 3);
+  computer.gameboard.receiveAttack(4, 3);
+  computer.gameboard.receiveAttack(5, 3);
 
-    computer.gameboard.receiveAttack(5, 1);
-    computer.gameboard.receiveAttack(6, 1);
-    computer.gameboard.receiveAttack(7, 1);
-    computer.gameboard.receiveAttack(8, 1);
-    computer.gameboard.receiveAttack(9, 1);
+  computer.gameboard.receiveAttack(5, 1);
+  computer.gameboard.receiveAttack(6, 1);
+  computer.gameboard.receiveAttack(7, 1);
+  computer.gameboard.receiveAttack(8, 1);
+  computer.gameboard.receiveAttack(9, 1);
 
-    computer.gameboard.receiveAttack(7, 5);
-    computer.gameboard.receiveAttack(7, 6);
-    computer.gameboard.receiveAttack(7, 7);
-    computer.gameboard.receiveAttack(7, 8);
-    renderPlayerBoardsUI();
+  computer.gameboard.receiveAttack(7, 5);
+  computer.gameboard.receiveAttack(7, 6);
+  computer.gameboard.receiveAttack(7, 7);
+  computer.gameboard.receiveAttack(7, 8);
+  renderPlayerBoardsUI();
+}
+
+function defaultHitsOnHuman() {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 10; j++) {
+      human.gameboard.receiveAttack(i, j);
+    }
+  }
+  human.gameboard.receiveAttack(9, 0);
+  human.gameboard.receiveAttack(9, 1);
+  human.gameboard.receiveAttack(9, 2);
+  human.gameboard.receiveAttack(9, 3);
+  human.gameboard.receiveAttack(9, 4);
+  human.gameboard.receiveAttack(9, 5);
+  human.gameboard.receiveAttack(9, 7);
+  human.gameboard.receiveAttack(9, 8);
+  human.gameboard.receiveAttack(9, 9);
+  renderPlayerBoardsUI();
 }
 
 mainWrapper = document.querySelector("#wrapper-main");
