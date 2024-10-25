@@ -16,6 +16,9 @@ function createPlayerBoardUI(player, boardID) {
       //cells containing ship
       if (player.gameboard.board[i][j].containsShip()) {
         cellUI.classList.add("ship-cell");
+        if(player.name == "Computer"){
+          cellUI.classList.add("computer-cell");
+        }
       }
 
       //attacked cells

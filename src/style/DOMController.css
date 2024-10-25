@@ -37,10 +37,14 @@ body {
 
 #wrapper-main > #wrapper-gameboard {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   margin-top: 40px;
   height: 90%;
   background-color: var(--bg-color);
+}
+
+#wrapper-gameboard > div {
+  margin: 0 auto;
 }
 
 .board {
@@ -67,6 +71,11 @@ body {
   border: 2px solid greenyellow;
 }
 
+/* remove this css in production */
+.ship-cell.computer-cell {
+  border: 2px solid black;
+}
+
 .ship-cell.hit-cell {
   background-color: var(--grid-hit-ship-cell-color);
 }
@@ -84,11 +93,10 @@ body {
   flex: 1;
 }
 
-#place-button {
-  width: 190px;
-  height: 50px;
-  margin-left: 100px;
+#place-button,
+#axis-button {
+  margin: 80px 0;
+  padding: 20px;
   font-size: 1.2rem;
-  font-weight: 400;
   background-color: gray;
 }

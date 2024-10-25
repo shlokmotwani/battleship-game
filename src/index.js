@@ -13,36 +13,49 @@ let computerBoardUI;
 let humanTurn = true;
 let displayArea;
 let shipLengths = [2, 3, 3, 4, 5];
+let totalShipsToBePlaced = shipLengths.length;
+let currentAxis = 0;
 let gameStarted = false;
+let placedShipCount;
+let controllerDiv;
 
 //initialisation of human board
 function humanSetup() {
   let placeButton;
-  let controllerDiv = document.createElement("div");
-  controllerDiv.cssText = `
+  let axisButton;
+  controllerDiv = document.createElement("div");
+  controllerDiv.style.cssText = `
     display: flex;
-    justify-content: center;
-    background-color: black;
-    width: 50%;`;
+    flex-direction: column;`;
+
   placeButton = document.createElement("button");
   placeButton.id = "place-button";
   placeButton.textContent = "Place ships";
 
+  axisButton = document.createElement("button");
+  axisButton.id = "axis-button";
+  axisButton.textContent = "Change axis";
+
   placeButton.addEventListener("click", () => {
     placeButton.style.visibility = "hidden";
+    displayArea.textContent = "Place your ships, human!";
     gameStarted = true;
     renderPlayerBoardsUI();
   });
 
+  axisButton.addEventListener("click", () => {
+    currentAxis = currentAxis == 0 ? 1 : 0;
+  });
+
   controllerDiv.appendChild(placeButton);
-  mainWrapper.appendChild(controllerDiv);
+  controllerDiv.appendChild(axisButton);
 }
 
 //initialisation of computer board
 function computerSetup() {
   let size = computer.gameboard.getBoardSize();
   let shipLengths = [2, 3, 3, 4, 5];
-  let shipCount = shipLengths.length;
+  let totalShipCount = shipLengths.length;
 
   function getRandomValidCellFor(ship, axis) {
     while (true) {
@@ -56,7 +69,7 @@ function computerSetup() {
   }
 
   //place randomly created ships on the board
-  for (let i = 0; i < shipCount; i++) {
+  for (let i = 0; i < totalShipCount; i++) {
     let len = shipLengths.pop();
     let ship = new Ship(len);
     let axis = Math.round(Math.random());
@@ -67,13 +80,20 @@ function computerSetup() {
 
 //temporary display feature - to be deleted later
 function displayAreaSetup() {
+  let displayDiv = document.createElement("div");
+  displayDiv.style.cssText = `
+    display: flex;
+    justify-content: center;
+    align-items: center;`;
+
   displayArea = document.createElement("div");
-  displayArea.textContent = "DISPLAY AREA";
   displayArea.style.cssText = `
     color: white;
-    font-size: 40px;`;
+    font-size: 40px;
+    height: 100px;`;
 
-  mainWrapper.appendChild(displayArea);
+  displayDiv.appendChild(displayArea);
+  mainWrapper.appendChild(displayDiv);
 }
 
 //multiplayer feature - to be implemented later
@@ -130,78 +150,82 @@ function computerAttackOn(player) {
 }
 
 function gameplay() {
+  placedShipCount = 0;
   human = new Player("Human");
   computer = new Player("Computer");
   humanSetup();
   computerSetup();
   displayAreaSetup();
   renderPlayerBoardsUI();
-  displayArea.textContent = "Human's turn";
+
+  //the following are functions used in testing
   //   defaultHitsOnComputer();
   //   defaultHitsOnHuman();
 }
 
 function renderPlayerBoardsUI() {
-  let shipCount = shipLengths.length;
+  let totalShipCount = shipLengths.length;
   let hoveredCells;
 
   boardWrapper.innerHTML = "";
   humanBoardUI = createPlayerBoardUI(human, "human-board");
   computerBoardUI = createPlayerBoardUI(computer, "computer-board");
 
-  if(gameStarted){
+  if (gameStarted) {
     humanBoardUI.addEventListener("mouseover", (event) => {
-        let id = event.target.id;
-        let x = id[1];
-        let y = id[3];
-    
-        //ignores unnecessary target events
-        if (isNaN(x)) {
-          return;
-        }
-    
-        // place ships one-by-one on the board
-        for (let i = 0; i < shipCount; i++) {
-          let len = shipLengths[shipLengths.length - 1];
-          let ship = new Ship(len);
-          let axis = 0;
-          let cell = human.gameboard.board[x][y];
-          let beingHovered = 1;
-          hoveredCells = human.gameboard.shipPlacementCheck(
-            ship,
-            cell,
-            axis,
-            beingHovered
-          );
-          if (hoveredCells) {
-            for (let i = 0; i < hoveredCells.length; i++) {
-              let x = hoveredCells[i].getCoordinates().x;
-              let y = hoveredCells[i].getCoordinates().y;
-              humanBoardUI.children[x].children[y].classList.add("hovered-cell");
-            }
-          } else {
-            console.log("error");
-          }
-        }
-      });
-    
-      humanBoardUI.addEventListener("mouseout", () => {
+      let id = event.target.id;
+      let x = id[1];
+      let y = id[3];
+
+      //ignores unnecessary target events
+      if (isNaN(x)) {
+        return;
+      }
+
+      // place ships one-by-one on the board
+      for (let i = 0; i < totalShipCount; i++) {
+        let len = shipLengths[shipLengths.length - 1];
+        let ship = new Ship(len);
+        let cell = human.gameboard.board[x][y];
+        let beingHovered = 1;
+        hoveredCells = human.gameboard.shipPlacementCheck(
+          ship,
+          cell,
+          currentAxis,
+          beingHovered
+        );
         if (hoveredCells) {
           for (let i = 0; i < hoveredCells.length; i++) {
             let x = hoveredCells[i].getCoordinates().x;
             let y = hoveredCells[i].getCoordinates().y;
-            humanBoardUI.children[x].children[y].classList.remove("hovered-cell");
+            humanBoardUI.children[x].children[y].classList.add("hovered-cell");
           }
+        } else {
+          console.log("error");
         }
-      });
-    
-      humanBoardUI.addEventListener("click", () => {
-        if (hoveredCells) {
-          let ship = new Ship(shipLengths.pop());
-          let axis = 0;
-          human.gameboard.placeShipAt(ship, hoveredCells[0], axis);
+      }
+    });
+
+    humanBoardUI.addEventListener("mouseout", () => {
+      if (hoveredCells) {
+        for (let i = 0; i < hoveredCells.length; i++) {
+          let x = hoveredCells[i].getCoordinates().x;
+          let y = hoveredCells[i].getCoordinates().y;
+          humanBoardUI.children[x].children[y].classList.remove("hovered-cell");
         }
-      });
+      }
+    });
+
+    humanBoardUI.addEventListener("click", () => {
+      if (hoveredCells) {
+        let ship = new Ship(shipLengths.pop());
+        human.gameboard.placeShipAt(ship, hoveredCells[0], currentAxis);
+        placedShipCount++;
+        if (placedShipCount == totalShipsToBePlaced) {
+          displayArea.textContent = "Human's turn";
+        }
+      }
+    });
   }
 
   computerBoardUI.addEventListener("click", (event) => {
@@ -229,6 +253,7 @@ function renderPlayerBoardsUI() {
   });
 
   boardWrapper.appendChild(humanBoardUI);
+  boardWrapper.appendChild(controllerDiv);
   boardWrapper.appendChild(computerBoardUI);
 }
 
