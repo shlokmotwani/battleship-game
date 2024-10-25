@@ -200,8 +200,6 @@ function renderPlayerBoardsUI() {
             let y = hoveredCells[i].getCoordinates().y;
             humanBoardUI.children[x].children[y].classList.add("hovered-cell");
           }
-        } else {
-          console.log("error");
         }
       }
     });
